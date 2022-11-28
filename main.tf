@@ -137,3 +137,28 @@ resource "aws_security_group" "prod_web" {
     Name = "drift_demo"
   }
 }
+
+resource "aws_s3_bucket_policy" "awsjamdemo_bucketpolicy" {
+  bucket = aws_s3_bucket.awsjamdemo_bucket.id
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "awsjamdemo_bucket-restrict-access-to-users-or-roles",
+      "Effect": "Allow",
+      "Principal": [
+        {
+          "AWS": [
+            "<aws_policy_role_arn>"
+          ]
+        }
+      ],
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::awsjamdemo_bucket/*"
+    }
+  ]
+}
+POLICY
+}
